@@ -28,3 +28,4 @@ hs_err_pid*
 .idea/vcs.xml
 Low_Level_Design.iml
 !/retail-biz/.mvn/
+!/lld-master-design.iml
