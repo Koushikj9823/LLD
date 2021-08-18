@@ -11,6 +11,7 @@
     <description>This Module consists of set of low level system designs</description>
     <modules>
         <module>retail-biz</module>
+        <module>codeathon</module>
     </modules>
 
 </project>
