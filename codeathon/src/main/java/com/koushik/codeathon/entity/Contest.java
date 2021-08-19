@@ -21,7 +21,9 @@ public class Contest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private Level level;
+    @Enumerated(EnumType.STRING)
     private ContestStatus status;
 
     @Convert(converter = ContestQuestionsConverter.class)

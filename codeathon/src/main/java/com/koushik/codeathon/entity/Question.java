@@ -13,5 +13,6 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private Level level;
 }
