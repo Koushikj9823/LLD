@@ -1,7 +1,6 @@
 package com.koushik.codeathon.repository;
 
 import com.koushik.codeathon.entity.Coder;
-import com.koushik.codeathon.entity.Question;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;

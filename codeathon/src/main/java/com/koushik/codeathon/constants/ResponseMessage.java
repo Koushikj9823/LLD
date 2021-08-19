@@ -1,5 +1,5 @@
 package com.koushik.codeathon.constants;
 
 public enum ResponseMessage {
-    ALREADY_EXISTS,SUCCESS,FAILED
+    ALREADY_EXISTS,SUCCESS,FAILED,NOT_FOUND
 }
