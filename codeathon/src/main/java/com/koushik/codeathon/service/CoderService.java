@@ -24,7 +24,12 @@ public class CoderService {
         return ResponseMessage.SUCCESS;
     }
 
-    public ResponseMessage joinContest(){
+    public ResponseMessage joinContest(String contestName){
+        if(contestRepository.findByName(contestName).isPresent()){
+
+        }
+
+
         return ResponseMessage.SUCCESS;
     }
     public ResponseMessage withdrawContest(){

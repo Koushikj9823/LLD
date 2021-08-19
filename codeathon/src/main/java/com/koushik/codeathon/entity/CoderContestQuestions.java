@@ -1,0 +1,17 @@
+package com.koushik.codeathon.entity;
+
+import lombok.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@ToString
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CoderContestQuestions {
+    Map<String, List<Long>> contestToQuestionsMap = new HashMap<>();
+}

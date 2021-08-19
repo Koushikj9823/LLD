@@ -1,21 +1,21 @@
 package com.koushik.codeathon.entity;
 
+import com.koushik.codeathon.converter.CoderContestQuestionsConverter;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Data
+@Table(name = "coder")
 public class Coder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String email;
     private String username;
-    private List<Contest> contestList = new ArrayList<>();
+    private int score;
+
+    @Convert(converter = CoderContestQuestionsConverter.class)
+    CoderContestQuestions coderContestQuestions = new CoderContestQuestions();
 }

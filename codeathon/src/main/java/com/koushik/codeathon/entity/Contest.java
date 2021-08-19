@@ -2,16 +2,20 @@ package com.koushik.codeathon.entity;
 
 import com.koushik.codeathon.constants.ContestStatus;
 import com.koushik.codeathon.constants.Level;
-import lombok.Data;
+import com.koushik.codeathon.converter.ContestQuestionsConverter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
+@Builder
+@Table(name = "contest")
 public class Contest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +23,8 @@ public class Contest {
     private String name;
     private Level level;
     private ContestStatus status;
-    private List<Question> questionList;
-    private List<Coder> coderList;
+
+    @Convert(converter = ContestQuestionsConverter.class)
+    private ContestQuestions contestQuestions;
 
 }
