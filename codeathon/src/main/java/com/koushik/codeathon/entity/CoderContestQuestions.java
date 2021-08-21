@@ -1,5 +1,6 @@
 package com.koushik.codeathon.entity;
 
+import com.koushik.codeathon.constants.AnswerStatus;
 import lombok.*;
 
 import java.util.HashMap;
@@ -13,5 +14,5 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CoderContestQuestions {
-    Map<String, List<Long>> contestToQuestionsMap = new HashMap<>();
+    Map<String, List<HashMap<Long, AnswerStatus>>> contestToQuestionsMap = new HashMap<>();
 }

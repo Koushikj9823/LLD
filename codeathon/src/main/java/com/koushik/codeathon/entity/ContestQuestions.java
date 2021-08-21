@@ -13,5 +13,5 @@ import java.util.List;
 @Getter
 @Setter
 public class ContestQuestions {
-   private List<Long> questions = new LinkedList<>();
+   private List<Long> questions;
 }

@@ -28,7 +28,7 @@ public class QuestionService {
         return "Question created!";
     }
 
-    public List<Question> getAllQuestionsByLevel(Level level){
+    public List<Long> getAllQuestionsByLevel(Level level){
         return questionRepository.findAllQuestionsByLevel(level.toString());
     }
 

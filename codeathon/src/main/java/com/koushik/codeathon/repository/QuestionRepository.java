@@ -11,5 +11,5 @@ public interface QuestionRepository extends BaseRepository<Question> {
     Optional<Question> findByName(String questionName);
 
     @Query(value = "select * from questions where level=:level",nativeQuery = true)
-    List<Question> findAllQuestionsByLevel(String level);
+    List<Long> findAllQuestionsByLevel(String level);
 }
