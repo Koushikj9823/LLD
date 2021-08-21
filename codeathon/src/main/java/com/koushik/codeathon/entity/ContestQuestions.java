@@ -1,9 +1,6 @@
 package com.koushik.codeathon.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +9,8 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContestQuestions {
    private List<Long> questions;
 }

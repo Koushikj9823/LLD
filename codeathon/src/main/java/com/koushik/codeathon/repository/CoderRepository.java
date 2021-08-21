@@ -10,5 +10,5 @@ public interface CoderRepository extends BaseRepository<Coder> {
     Optional<Coder>findByUsername (String username);
 
     @Query(value = "select * from coder order by score desc",nativeQuery = true)
-    List<Coder> findAllQuestionsByLevel();
+    List<Coder> leaderBoard();
 }

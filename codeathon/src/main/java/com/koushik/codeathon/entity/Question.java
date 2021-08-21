@@ -1,8 +1,10 @@
 package com.koushik.codeathon.entity;
 
 import com.koushik.codeathon.constants.Level;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Data
 @Table(name = "questions")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

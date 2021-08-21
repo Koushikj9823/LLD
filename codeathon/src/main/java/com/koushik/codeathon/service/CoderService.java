@@ -9,10 +9,7 @@ import com.koushik.codeathon.repository.ContestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CoderService {
@@ -36,6 +33,12 @@ public class CoderService {
         return ResponseMessage.SUCCESS;
     }
 
+    public String createMultipleCoders(final List<Coder> coders){
+        coders.stream().filter(Objects::nonNull).forEach(coder -> coder.setScore(0));
+        coderRepository.saveAll(coders);
+        return "Success";
+    }
+
     public String joinContest(String contestName, String username){
         if(validateCoder(username))
             return "coder "+ResponseMessage.NOT_FOUND;
@@ -47,7 +50,7 @@ public class CoderService {
 
         List<Long> questionList = contest.getContestQuestions().getQuestions();
 
-        Map<String, List<HashMap<Long, AnswerStatus>>> fetchedQuestions = coder.getCoderContestQuestions().getContestToQuestionsMap();
+        Map<String, HashMap<Long, AnswerStatus>> fetchedQuestions = coder.getCoderContestQuestions().getContestToQuestionsMap();
         fetchedQuestions.putIfAbsent(contestName, initializeAnswerStatus(questionList));
 
         Coder updatedCoder = coderRepository.findByUsername(username).get();
@@ -56,16 +59,13 @@ public class CoderService {
 
         return "Contest Joined";
     }
-    private List<HashMap<Long, AnswerStatus>> initializeAnswerStatus(List<Long> questionsList){
-        List<HashMap<Long, AnswerStatus>> questionListMap = new LinkedList<>();
-
+    private HashMap<Long, AnswerStatus> initializeAnswerStatus(List<Long> questionsList){
+        HashMap<Long, AnswerStatus> questionMap = new HashMap<>();
         for (Long questionId :
                 questionsList) {
-            HashMap<Long, AnswerStatus> questionMap = new HashMap<>();
             questionMap.put(questionId,AnswerStatus.UNSOLVED);
-            questionListMap.add(questionMap);
         }
-        return questionListMap;
+        return questionMap;
     }
     public String withdrawContest(String contestName, String username){
 
@@ -76,7 +76,7 @@ public class CoderService {
 
 
         Coder updatedCoder = coderRepository.findByUsername(username).get();
-        Map<String, List<HashMap<Long, AnswerStatus>>> fetchedQuestions = updatedCoder.getCoderContestQuestions().getContestToQuestionsMap();
+        Map<String, HashMap<Long, AnswerStatus>> fetchedQuestions = updatedCoder.getCoderContestQuestions().getContestToQuestionsMap();
         fetchedQuestions.remove(contestName);
         updatedCoder.getCoderContestQuestions().setContestToQuestionsMap(fetchedQuestions);
         coderRepository.save(updatedCoder);
@@ -87,7 +87,7 @@ public class CoderService {
     public List<Coder> getAllContestCoders(final String contestName){
         final List<Coder> coderList = new LinkedList<>();
         coderRepository.findAll().forEach(coder -> {
-            final Map<String, List<HashMap<Long, AnswerStatus>>> contestQuestions = coder.getCoderContestQuestions().getContestToQuestionsMap();
+            final Map<String, HashMap<Long, AnswerStatus>> contestQuestions = coder.getCoderContestQuestions().getContestToQuestionsMap();
             if(contestQuestions.containsKey(contestName)){
                 coderList.add(coder);
             }

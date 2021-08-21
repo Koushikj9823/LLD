@@ -3,7 +3,6 @@ package com.koushik.codeathon.service;
 import com.koushik.codeathon.constants.AnswerStatus;
 import com.koushik.codeathon.constants.ContestStatus;
 import com.koushik.codeathon.constants.Level;
-import com.koushik.codeathon.constants.ResponseMessage;
 import com.koushik.codeathon.entity.Coder;
 import com.koushik.codeathon.entity.Contest;
 import com.koushik.codeathon.entity.ContestQuestions;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -31,9 +31,9 @@ public class ContestService {
     @Autowired
     CoderService coderService;
 
-    public String createContest(String name, Level level, String coderName){
+    public Contest createContest(String name, Level level, String coderName){
         if(!coderRepository.findByUsername(coderName).isPresent())
-            return "contest creation was "+ResponseMessage.FAILED;
+            return null;
 
         Coder coder = coderRepository.findByUsername(coderName).get();
         List<Long> questionsList = getQuestionsByLevel(level);
@@ -43,7 +43,7 @@ public class ContestService {
                                 .userId(coder.getId()).status(ContestStatus.STARTED).contestQuestions(question)
                                 .build();
         contestRepository.save(newContest);
-        return "contest creation was "+ResponseMessage.SUCCESS;
+        return newContest;
     }
 
     private List<Long> getQuestionsByLevel(Level level){
@@ -58,13 +58,13 @@ public class ContestService {
         return null;
     }
 
-    private void calculateScore(String coderName,HashMap<Long,AnswerStatus> userQuestionStatus,int scoreConstant){
+    public void calculateScore(String coderName, HashMap<Long, AnswerStatus> coderQuestionStatus, int scoreConstant, String contestName){
 
         if(coderRepository.findByUsername(coderName).isPresent()){
             Coder coder = coderRepository.findByUsername(coderName).get();
             int score = 0;
-            for(Long id:userQuestionStatus.keySet()) {
-                AnswerStatus status = userQuestionStatus.get(id);
+            for(Long id:coderQuestionStatus.keySet()) {
+                AnswerStatus status = coderQuestionStatus.get(id);
                 if (status == AnswerStatus.SOLVED) {
                     score += (scoreConstant);
                 } else if (status == AnswerStatus.PARTIALLY_SOLVED) {
@@ -73,20 +73,13 @@ public class ContestService {
                     score += 0;
             }
             coder.setScore(coder.getScore()+score);
+
+            Map<String, HashMap<Long, AnswerStatus>> coderContestList = coder.getCoderContestQuestions().getContestToQuestionsMap();
+            coderContestList.put(contestName,coderQuestionStatus);
+            coder.getCoderContestQuestions().setContestToQuestionsMap(coderContestList);
+
             coderRepository.save(coder);
         }
     }
 
-    private List<Coder> leaderBoard(String contestName){
-
-        if(contestRepository.findByName(contestName).isPresent()){
-//            Contest contest = contestRepository.findByName(contestName).get();
-            final List<Coder> coderList = coderService.getAllContestCoders(contestName);
-            coderList.sort((Coder c1,Coder c2)->c2.getScore()-c1.getScore());
-            return coderList;
-
-        }
-        else
-            return null;
-    }
 }

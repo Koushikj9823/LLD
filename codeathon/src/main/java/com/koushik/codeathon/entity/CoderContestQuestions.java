@@ -14,5 +14,5 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CoderContestQuestions {
-    Map<String, List<HashMap<Long, AnswerStatus>>> contestToQuestionsMap = new HashMap<>();
+    Map<String, HashMap<Long, AnswerStatus>> contestToQuestionsMap = new HashMap<>();
 }

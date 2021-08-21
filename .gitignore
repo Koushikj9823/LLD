@@ -30,3 +30,5 @@ Low_Level_Design.iml
 !/retail-biz/.mvn/
 !/lld-master-design.iml
 /codeathon/.mvn/
+/db.mv.db
+/.idea/
