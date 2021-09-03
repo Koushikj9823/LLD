@@ -32,8 +32,4 @@ public class ParkingSpot {
         this.vehicleDetails = null;
         this.available = true;
     }
-    public double getPrice(long duration) {
-        System.out.println("Default Price...");
-        return duration*0.01;
-    }
 }

@@ -14,4 +14,7 @@ public class VehicleDetails {
     private String licenceNumber;
     private VehicleType vehicleType;
     private TicketDetails ticket;
+    /*
+    PaymentInfo info -> using ticket
+     */
 }

@@ -31,6 +31,8 @@ public class TicketDetails {
                     .vehicleDetails(vehicleDetails).parkingSpot(parkingSpot)
                     .build();
     }
-
+    /*
+    add endtime and calculate cost
+     */
 
 }

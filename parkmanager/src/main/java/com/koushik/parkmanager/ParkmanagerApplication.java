@@ -24,33 +24,31 @@ public class ParkmanagerApplication implements CommandLineRunner {
         final String parkingLotName = "Havoc Parking Lot";
         Address address = Address.builder().block("West Block").street("Baker Street").city("Winterfell").state("Westeros").country("India").build();
 
-        Map<ParkingSpotType, List<ParkingSpot>> parkingSlots = new HashMap<>();
-
-        List<ParkingSpot> smallSlotsList = new ArrayList<>();
-        smallSlotsList.add(ParkingSpot.builder().name("S1").parkingSpotType(ParkingSpotType.SMALL).build());
-//        smallSlotsList.add(ParkingSpot.builder().name("S2").parkingSpotType(ParkingSpotType.SMALL).build());
-//        smallSlotsList.add(ParkingSpot.builder().name("S3").parkingSpotType(ParkingSpotType.SMALL).build());
-//        smallSlotsList.add(ParkingSpot.builder().name("S4").parkingSpotType(ParkingSpotType.SMALL).build());
-//        smallSlotsList.add(ParkingSpot.builder().name("S5").parkingSpotType(ParkingSpotType.SMALL).build());
-
-        List<ParkingSpot> compactSlotsList = new ArrayList<>();
-        compactSlotsList.add(ParkingSpot.builder().name("C1").parkingSpotType(ParkingSpotType.COMPACT).build());
-        compactSlotsList.add(ParkingSpot.builder().name("C2").parkingSpotType(ParkingSpotType.COMPACT).build());
-        compactSlotsList.add(ParkingSpot.builder().name("C3").parkingSpotType(ParkingSpotType.COMPACT).build());
-        compactSlotsList.add(ParkingSpot.builder().name("C4").parkingSpotType(ParkingSpotType.COMPACT).build());
-        compactSlotsList.add(ParkingSpot.builder().name("C5").parkingSpotType(ParkingSpotType.COMPACT).build());
-
-        List<ParkingSpot> largeSlotsList = new ArrayList<>();
-        largeSlotsList.add(ParkingSpot.builder().name("L1").parkingSpotType(ParkingSpotType.LARGE).build());
-        largeSlotsList.add(ParkingSpot.builder().name("L2").parkingSpotType(ParkingSpotType.LARGE).build());
-        largeSlotsList.add(ParkingSpot.builder().name("L3").parkingSpotType(ParkingSpotType.LARGE).build());
-        largeSlotsList.add(ParkingSpot.builder().name("L4").parkingSpotType(ParkingSpotType.LARGE).build());
-        largeSlotsList.add(ParkingSpot.builder().name("L5").parkingSpotType(ParkingSpotType.LARGE).build());
+        Map<ParkingSpotType, HashMap<String,ParkingSpot>> parkingSlots = new HashMap<>();
 
 
-        parkingSlots.put(ParkingSpotType.SMALL,smallSlotsList);
-        parkingSlots.put(ParkingSpotType.COMPACT,compactSlotsList);
-        parkingSlots.put(ParkingSpotType.LARGE,largeSlotsList);
+        HashMap<String,ParkingSpot> smallMap = new HashMap<>();
+        smallMap.put("S01",ParkingSpot.builder().name("S01").parkingSpotType(ParkingSpotType.SMALL).build());
+        smallMap.put("S02",ParkingSpot.builder().name("S02").parkingSpotType(ParkingSpotType.SMALL).build());
+        smallMap.put("S11",ParkingSpot.builder().name("S11").parkingSpotType(ParkingSpotType.SMALL).build());
+        smallMap.put("S12",ParkingSpot.builder().name("S12").parkingSpotType(ParkingSpotType.SMALL).build());
+        smallMap.put("S21",ParkingSpot.builder().name("S21").parkingSpotType(ParkingSpotType.SMALL).build());
+
+        HashMap<String,ParkingSpot> compactMap = new HashMap<>();
+        compactMap.put("C01",ParkingSpot.builder().name("C01").parkingSpotType(ParkingSpotType.COMPACT).build());
+        compactMap.put("C02",ParkingSpot.builder().name("C02").parkingSpotType(ParkingSpotType.COMPACT).build());
+        compactMap.put("C11",ParkingSpot.builder().name("C11").parkingSpotType(ParkingSpotType.COMPACT).build());
+        compactMap.put("C12",ParkingSpot.builder().name("C12").parkingSpotType(ParkingSpotType.COMPACT).build());
+        compactMap.put("C21",ParkingSpot.builder().name("C21").parkingSpotType(ParkingSpotType.COMPACT).build());
+
+        HashMap<String,ParkingSpot> largeMap = new HashMap<>();
+        largeMap.put("L01",ParkingSpot.builder().name("L01").parkingSpotType(ParkingSpotType.LARGE).build());
+        largeMap.put("L02",ParkingSpot.builder().name("L02").parkingSpotType(ParkingSpotType.LARGE).build());
+
+
+        parkingSlots.put(ParkingSpotType.SMALL,smallMap);
+        parkingSlots.put(ParkingSpotType.COMPACT,compactMap);
+        parkingSlots.put(ParkingSpotType.LARGE,largeMap);
 
         List<ParkingFloor> parkingFloorsList = new ArrayList<>();
 
@@ -69,10 +67,14 @@ public class ParkmanagerApplication implements CommandLineRunner {
         VehicleDetails vehicleDetails3 = VehicleDetails.builder().vehicleType(VehicleType.BUS).licenceNumber("WS-09-WF-1452").build();
 
         TicketDetails ticketDetails1 = parkingLot.assignTicket(vehicleDetails1);
-        TicketDetails ticketDetails2 = parkingLot.assignTicket(vehicleDetails2);
         log.info("Ticket details :{}",ticketDetails1.toString());
-        log.info("Ticket details :{}",ticketDetails2.toString());
         Thread.sleep(10000);
+        TicketDetails ticketDetails2 = parkingLot.assignTicket(vehicleDetails2);
+        if(ticketDetails2==null)
+            log.info("Sorry No Parking Space Available");
+        else
+            log.info("Ticket details :{}",ticketDetails2.toString());
+
         log.info("Parking price: {}",parkingLot.scanAndPay(ticketDetails1));
         Thread.sleep(10000);
         log.info("Parking price: {}",parkingLot.scanAndPay(ticketDetails2));
@@ -80,7 +82,7 @@ public class ParkmanagerApplication implements CommandLineRunner {
         TicketDetails ticketDetails3 = parkingLot.assignTicket(vehicleDetails3);
         log.info("Ticket details :{}",ticketDetails3.toString());
         Thread.sleep(10000);
-        log.info("Parking price: {}",parkingLot.scanAndPay(ticketDetails3));
+        log.info("Parking price: {} for ticket number {}",parkingLot.scanAndPay(ticketDetails3),ticketDetails3.getTicketNumber());
 
     }
 }

@@ -3,6 +3,7 @@ package com.koushik.parkmanager.model;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,25 +17,26 @@ import java.util.Map;
 public class ParkingFloor {
 
     private String name;
-    private Map<ParkingSpotType, List<ParkingSpot>> parkingSlots;
+    private Map<ParkingSpotType, HashMap<String,ParkingSpot>> parkingSlots;
+    /*
+       int levelId;
+       DisplayBoard
+     */
 
     public ParkingSpot getRelevantParkingSpot(VehicleDetails vehicleDetails){
 
         VehicleType vehicleType = vehicleDetails.getVehicleType();
         ParkingSpotType parkingSpotType = getCorrectSpot(vehicleType);
 
-        List<ParkingSpot> parkingSpotList = parkingSlots.get(parkingSpotType);
+        HashMap<String, ParkingSpot> parkingSpotList = parkingSlots.get(parkingSpotType);
         ParkingSpot assignedParkingSpot = null;
-        for (ParkingSpot spot :
-                parkingSpotList) {
-
-            if(spot.isAvailable()){
-                assignedParkingSpot = getCorrectSpotInstance(parkingSpotType);
+        for(Map.Entry<String,ParkingSpot> m : parkingSpotList.entrySet()){
+            if(m.getValue().isAvailable()) {
+                assignedParkingSpot = m.getValue();
                 assignedParkingSpot.addVehicle(vehicleDetails);
                 log.info("Assigned parking Spot name {}",assignedParkingSpot.getName());
                 break;
             }
-
         }
     return assignedParkingSpot;
     }
@@ -50,25 +52,9 @@ public class ParkingFloor {
             return ParkingSpotType.COMPACT;
         else if(vehicleType.equals(VehicleType.BUS))
             return ParkingSpotType.LARGE;
-        log.info("Reached here...");
         return null;
     }
-    private ParkingSpot getCorrectSpotInstance(ParkingSpotType parkingSpotType){
 
-        log.info("Vehicle type: {}",parkingSpotType);
-        if(parkingSpotType.equals(ParkingSpotType.SMALL))
-            return new TwoWheelerSlot(ParkingSpotType.SMALL);
-        else if(parkingSpotType.equals(ParkingSpotType.COMPACT))
-            return new CompactSlot(ParkingSpotType.COMPACT);
-        else if(parkingSpotType.equals(ParkingSpotType.LARGE))
-            return new LargeSlot(ParkingSpotType.LARGE);
-        else if(parkingSpotType.equals(ParkingSpotType.HANDICAPPED))
-            return new LargeSlot(ParkingSpotType.HANDICAPPED);
-        else if(parkingSpotType.equals(ParkingSpotType.ELECTRIC))
-            return new LargeSlot(ParkingSpotType.ELECTRIC);
-        log.info("Reached here...");
-        return new ParkingSpot();
-    }
 
 
 
